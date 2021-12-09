@@ -18,8 +18,6 @@ func init(){
 	flag.Parse()
 }
 
-
-
 func getSub() []byte{
 	file, err := os.Open(*subPath)
 	if err != nil {
