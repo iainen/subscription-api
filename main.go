@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -19,21 +20,22 @@ func init(){
 
 
 
-func getSub() string{
+func getSub() []byte{
 	file, err := os.Open(*subPath)
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 	content, err := ioutil.ReadAll(file)
-	return string(content)
+	return content
 }
 
 func SubHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, getSub())
+	sEnc:= base64.StdEncoding.EncodeToString(getSub())
+	fmt.Fprintf(w, sEnc)
 }
 
 func main () {
-	http.HandleFunc("/", SubHandler)
+	http.HandleFunc("/sub", SubHandler)
 	http.ListenAndServe(*port, nil)
 }
