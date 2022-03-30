@@ -2,24 +2,14 @@ package main
 
 import (
 	"encoding/base64"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 )
 
-var subPath *string
-var port *string
-
-func init(){
-	subPath = flag.String("sub_path", "", "subPath")
-	port = flag.String("port", "", "port")
-	flag.Parse()
-}
-
 func getSub() []byte{
-	file, err := os.Open(*subPath)
+	file, err := os.Open("config/sub.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -35,5 +25,5 @@ func SubHandler(w http.ResponseWriter, r *http.Request) {
 
 func main () {
 	http.HandleFunc("/sub", SubHandler)
-	http.ListenAndServe(*port, nil)
+	http.ListenAndServe(":8080", nil)
 }
