@@ -8,8 +8,9 @@ import (
 	"os"
 )
 
-func getSub() []byte{
-	file, err := os.Open("config/sub.txt")
+func getSub(token string) []byte {
+	path := fmt.Sprintf("config/%s.txt", token)
+	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
 	}
@@ -19,11 +20,12 @@ func getSub() []byte{
 }
 
 func SubHandler(w http.ResponseWriter, r *http.Request) {
-	sEnc:= base64.StdEncoding.EncodeToString(getSub())
+	token := r.FormValue("token")
+	sEnc := base64.StdEncoding.EncodeToString(getSub(token))
 	fmt.Fprintf(w, sEnc)
 }
 
-func main () {
+func main() {
 	http.HandleFunc("/sub", SubHandler)
 	http.ListenAndServe(":8080", nil)
 }
